@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Hello world</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <script src="main.js"></script>
+    <style>
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td,
+        th {
+            border: 1px solid white;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: grey;
+        }
+    </style>
+</head>
+
+<body>
+
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <button onclick="hentpare()">skrret</button>
+    <table style="width:100%">
+        <ul id="liste"></ul>
+    </table>
+
+    <script>
+        hentpare();
+
+        function hentpare() {
+            var xmlhttp = new XMLHttpRequest();
+ 
+            xmlhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    console.log("virket")
+                    console.log("response" + this.response);
+                    //laver det om til object
+                    var obj = JSON.parse(this.response)
+                    
+                    var startappend = "<tr><th>onoff</th><th>nomiel strøm</th><th>aktuel strøm</th><th>lysIntensitet</th><th>farve</th><th>uniktID</th><th>hardwareID</th><th>softwareID</th></tr> "
+                    $('#liste').append($(startappend));
+
+                    for (let index = 0; index < obj.length; index++) {
+                        var start = '<tr>';
+
+                        var onoff = '<td>'+ obj[index].onoff+' </td>'
+                        var nomiel = '<td>'+ obj[index].nominelStrom +' </td>'
+                        var aktuel = '<td>'+ obj[index].aktuelStrom +' </td>'
+                        var lysintensitet = '<td>'+ obj[index].lysIntensitet +' </td>'
+                        var farve = '<td>'+ obj[index].farve +' </td>'
+                        var uniktID = '<td>'+ obj[index].uniktID +' </td>'
+                        var hardwareID = '<td>'+ obj[index].hardwareID +' </td>'
+                        var softwareID = '<td>'+ obj[index].softwareID +' </td>'
+                        
+
+                        var slut = '</tr>'
+
+                        var finallinje = start+onoff+nomiel+aktuel+lysintensitet+farve+uniktID+hardwareID+softwareID+slut;
+                        $('#liste').append($(finallinje));
+
+                    }
+                }
+            }
+            xmlhttp.open("GET", "http://localhost:5050/hent", true);
+            xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xmlhttp.send();
+        }
+    </script>
+    </body>
+    </html>
